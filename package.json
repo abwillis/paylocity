@@ -1,0 +1,54 @@
+{
+  "name": "paylocity_wrapper",
+  "version": "1.0.2",
+  "description": "Electron app that opens a paylocity",
+  "author": "CN=Andy Willis, OU=Information Technology, OU=Users, OU=Texarkana, DC=ledwell, DC=com",
+  "license": "BSD 3-Clause License",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder",
+    "dist:win": "electron-builder --win nsis"
+  },
+  "devDependencies": {
+    "@electron-forge/maker-msix": "^7.11.1",
+    "electron": "^31.0.0",
+    "electron-builder": "^24.13.3"
+  },
+  "build": {
+    "appId": "com.example.paylocitywrapper",
+    "productName": "Paylocity_Wrapper",
+    "asar": true,
+    "files": [
+      "main.js",
+      "preload.js",
+      "index.html",
+      "package.json",
+      "assets/**/*"
+    ],
+    "directories": {
+      "buildResources": "build"
+    },
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ],
+      "cscLink": "C:/apps/certs/my_code_sign.pfx",
+      "cscKeyPassword": "ChangeMeBetter",
+      "icon": "build/icon.ico",
+      "artifactName": "${productName}-${version}-Windows-${arch}.${ext}"
+    },
+    "nsis": {
+      "oneClick": true,
+      "perMachine": true,
+      "allowToChangeInstallationDirectory": false,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Paylocity Wrapper"
+    },
+    "portable": {
+      "artifactName": "${productName}-${version}-Portable-${arch}.${ext}"
+    }
+  }
+ }
