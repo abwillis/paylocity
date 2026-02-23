@@ -1,0 +1,106 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        background: transparent;
+        overflow: hidden;
+      }
+
+      /* The whole overlay area is the drag surface */
+      #surface {
+        width: 100%;
+        height: 100%;
+        display: grid;
+        place-items: center;
+      }
+
+      button {
+        all: unset;
+        cursor: pointer;
+        padding: 10px 14px;
+        border-radius: 999px;
+        border: 1px solid rgba(0,0,0,0.2);
+        background: rgba(0,0,0,0.72);
+        color: #fff;
+        font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+        font-size: 14px;
+        line-height: 14px;
+        box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+        user-select: none;
+        -webkit-user-select: none;
+        touch-action: none; /* important for pointer dragging on touch */
+      }
+      button:hover { background: rgba(0,0,0,0.82); }
+      button:active { transform: translateY(1px); }
+    </style>
+  </head>
+
+  <body>
+    <div id="surface">
+      <button id="reload">Reload</button>
+    </div>
+
+    <script>
+      const btn = document.getElementById('reload');
+
+      // Drag vs click discrimination:
+      // - If pointer moved more than threshold, treat as drag.
+      // - Otherwise treat as click => reload.
+      let dragging = false;
+      let moved = 0;
+      let lastX = 0;
+      let lastY = 0;
+
+      const MOVE_THRESHOLD_PX = 4;
+
+      btn.addEventListener('pointerdown', (e) => {
+        // Capture pointer so we keep getting events even if pointer leaves the button
+        btn.setPointerCapture(e.pointerId);
+
+        dragging = true;
+        moved = 0;
+        lastX = e.screenX;
+        lastY = e.screenY;
+      });
+
+      btn.addEventListener('pointermove', (e) => {
+        if (!dragging) return;
+
+        const dx = e.screenX - lastX;
+        const dy = e.screenY - lastY;
+
+        moved += Math.abs(dx) + Math.abs(dy);
+
+        lastX = e.screenX;
+        lastY = e.screenY;
+
+        // Only start moving after small deadzone to avoid accidental drags
+        if (moved >= MOVE_THRESHOLD_PX) {
+          window.electronOverlay?.moveBy?.(dx, dy);
+        }
+      });
+
+      btn.addEventListener('pointerup', (e) => {
+        if (!dragging) return;
+        dragging = false;
+
+        // If it barely moved, treat as a click => reload
+        if (moved < MOVE_THRESHOLD_PX) {
+          window.electronOverlay?.requestReload?.();
+        }
+
+        try { btn.releasePointerCapture(e.pointerId); } catch {}
+      });
+
+      btn.addEventListener('pointercancel', (e) => {
+        dragging = false;
+        try { btn.releasePointerCapture(e.pointerId); } catch {}
+      });
+    </script>
+  </body>
+</html>

@@ -1,4 +1,8 @@
-const { contextBridge } = require('electron');
-contextBridge.exposeInMainWorld('api', {
-  // safe, minimal surface
+
+const { contextBridge, ipcRenderer } = require('electron');
+
+contextBridge.exposeInMainWorld('electronOverlay', {
+  requestReload: () => ipcRenderer.send('overlay:reload'),
+  moveBy: (dx, dy) => ipcRenderer.send('overlay:move-by', { dx, dy })
 });
+
