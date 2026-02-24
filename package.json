@@ -1,6 +1,6 @@
 {
   "name": "paylocity_wrapper",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "description": "Electron app that opens a paylocity",
   "author": "CN=Andy Willis, OU=Information Technology, OU=Users, OU=Texarkana, DC=ledwell, DC=com",
   "license": "BSD 3-Clause License",
@@ -12,7 +12,7 @@
   },
   "devDependencies": {
     "@electron-forge/maker-msix": "^7.11.1",
-    "electron": "^40.4.0",
+    "electron": "^40.6.0",
     "electron-builder": "^24.13.3"
   },
   "build": {

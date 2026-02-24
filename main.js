@@ -33,19 +33,13 @@ function applyOverlayAnchor() {
   const mb = getMainBounds();
   if (!mb || !overlayWin || overlayWin.isDestroyed()) return;
 
-  // initialize at bottom-right if needed
+  // Only auto-center if user hasn't dragged yet
   if (!overlayAnchor) {
     overlayAnchor = {
-      x: mb.w - OVERLAY_W - DEFAULT_MARGIN,
-      y: mb.h - OVERLAY_H - DEFAULT_MARGIN
+      x: Math.round((mb.w - OVERLAY_W) / 2),
+      y: Math.round((mb.h - OVERLAY_H) / 2)
     };
   }
-
-  const maxX = mb.w - OVERLAY_W;
-  const maxY = mb.h - OVERLAY_H;
-
-  overlayAnchor.x = clamp(overlayAnchor.x, 0, maxX);
-  overlayAnchor.y = clamp(overlayAnchor.y, 0, maxY);
 
   overlayWin.setBounds({
     x: mb.x + overlayAnchor.x,
