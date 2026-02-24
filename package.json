@@ -1,6 +1,6 @@
 {
   "name": "paylocity_wrapper",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Electron app that opens a paylocity",
   "author": "CN=Andy Willis, OU=Information Technology, OU=Users, OU=Texarkana, DC=ledwell, DC=com",
   "license": "BSD 3-Clause License",
